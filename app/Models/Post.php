@@ -26,7 +26,7 @@ class Post
 
     public static function all()
     {
-        return collect(self::$blogPosts);
+        return collect(self::$blogPosts); // function collection untuk membuat array yg bisa diakses dg method eloquent
     }
 
     public static function find($slug)
