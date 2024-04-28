@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\PostController;
+use App\Models\Category;
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,14 +22,14 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-Route::get('/', function() {
+Route::get('/', function () {
     return view('home', [
         'title' => 'home'
     ]);
 });
 
-Route::get('/about', function() { 
-    return view('about',[
+Route::get('/about', function () {
+    return view('about', [
         'title' => 'about',
         'fullname' => 'guardians asguard',
         'email' => 'guardians.asguard@gmail.com',
@@ -33,52 +37,30 @@ Route::get('/about', function() {
     ]);
 });
 
-Route::get('/posts', function() {
-    $blogPost = [
-        [
-            'title' => 'first title ',
-            'slug' => 'first-title',
-            'author' => 'first author',
-            'post' => 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aspernatur, nesciunt tempora. Dolore asperiores provident, omnis magnam non a! Eum, possimus soluta. Voluptatem minus, iusto reiciendis asperiores eius quibusdam iste tempora molestiae? Libero in corporis, dolorum explicabo repellat, unde minus fugit molestias quis distinctio odio accusantium deserunt. Vero ratione nemo aliquam.'
-        ],
-        [
-            'title' => 'second title',
-            'slug' => 'second-title',
-            'author' => 'second author',
-            'post' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea unde architecto reiciendis et esse perspiciatis nemo voluptatibus. Doloremque cum, dolores numquam, temporibus expedita aspernatur itaque officia beatae ipsa eum nam. In harum laboriosam laudantium repellendus maiores quia odio ipsa adipisci, veniam, quam, blanditiis sunt officiis eum? Iste quis fuga maxime at, distinctio aspernatur repudiandae nesciunt minus tempore harum incidunt deleniti alias impedit, nulla, cumque provident facere? Asperiores sed laudantium ducimus ratione rem ad minima suscipit atque, itaque sit incidunt quidem nobis culpa eius possimus cupiditate! Mollitia nulla ullam ipsum asperiores voluptate tempore praesentium, unde neque? Quibusdam officiis obcaecati alias rem.'
-        ]
-    ];
-    
-    return view('posts', [
-        'title' => 'posts',
-        'posts' => $blogPost,
+Route::get('/posts', [PostController::class, 'index']);
+
+// Route::get('/posts/{slug}', [PostController::class, 'show']);
+Route::get('/posts/{post:slug}', [PostController::class, 'show']);
+
+Route::get('/categories', function () {
+    return view('categories', [
+        'title' => 'Post Categories',
+        'categories' => Category::all(),
     ]);
 });
 
-Route::get('/posts/{slug}', function($slug) {
-    $blogPost = [
-        [
-            'title' => 'first title ',
-            'slug' => 'first-title',
-            'author' => 'first author',
-            'post' => 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aspernatur, nesciunt tempora. Dolore asperiores provident, omnis magnam non a! Eum, possimus soluta. Voluptatem minus, iusto reiciendis asperiores eius quibusdam iste tempora molestiae? Libero in corporis, dolorum explicabo repellat, unde minus fugit molestias quis distinctio odio accusantium deserunt. Vero ratione nemo aliquam.'
-        ],
-        [
-            'title' => 'second title',
-            'slug' => 'second-title',
-            'author' => 'second author',
-            'post' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea unde architecto reiciendis et esse perspiciatis nemo voluptatibus. Doloremque cum, dolores numquam, temporibus expedita aspernatur itaque officia beatae ipsa eum nam. In harum laboriosam laudantium repellendus maiores quia odio ipsa adipisci, veniam, quam, blanditiis sunt officiis eum? Iste quis fuga maxime at, distinctio aspernatur repudiandae nesciunt minus tempore harum incidunt deleniti alias impedit, nulla, cumque provident facere? Asperiores sed laudantium ducimus ratione rem ad minima suscipit atque, itaque sit incidunt quidem nobis culpa eius possimus cupiditate! Mollitia nulla ullam ipsum asperiores voluptate tempore praesentium, unde neque? Quibusdam officiis obcaecati alias rem.'
-        ]
-    ];
-    
-    $selectedPost = [];
-    foreach ($blogPost as $post) {
-        if($post['slug'] === $slug) {
-            $selectedPost = $post;
-        }
-    }
-    return view('post', [
-        'title' => 'single post',
-        'post' => $selectedPost,
+Route::get('/categories/{category:slug}', function (Category $category) {
+    return view('category', [
+        'title' => $category->name,
+        'posts' => $category->posts,
+        'category' => $category->name,
+    ]);
+});
+
+
+Route::get('/authors/{author:username}', function (User $author) {
+    return view('posts', [
+        'title' => 'User Posts',
+        'posts' => $author->posts,
     ]);
 });
