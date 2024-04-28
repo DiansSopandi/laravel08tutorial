@@ -1,5 +1,5 @@
 @extends('layouts.main')
 
-@section('content')    
+@section('content')
     <h2>asguard articles</h2>
 @endsection
