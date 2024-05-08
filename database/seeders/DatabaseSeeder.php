@@ -73,8 +73,8 @@ class DatabaseSeeder extends Seeder
             'slug' => 'web-design',
         ]);
         Category::create([
-            'name' => 'Personal',
-            'slug' => 'personal',
+            'name' => 'King of Saudi Arabia',
+            'slug' => 'king-of-saudi-arabia',
         ]);
     }
 }
